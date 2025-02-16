@@ -15,36 +15,11 @@ model User {
   email    String  @unique
   password String?
 
-  name    String @default("Не указано")
-  picture String @default("/uploads/no-user-image.png")
-
-  stores Store[]
-
-  favorites Product[]
-  reviews   Review[]
-  orders    Order[]
+  name     String    @default("Не указано")
+  picture  String    @default("/uploads/no-user-image.png")
+  products Product[]
 
   @@map("user")
-}
-
-model Store {
-  id        String   @id @default(cuid())
-  createdAt DateTime @default(now()) @map("created_at")
-  updatedAt DateTime @updatedAt @map("updated_at")
-
-  title       String
-  description String?
-
-  user   User?   @relation(fields: [userId], references: [id])
-  userId String? @map("user_id")
-
-  products   Product[]
-  categories Category[]
-  colors     Color[]
-  reviews    Review[]
-  orderItems OrderItem[]
-
-  @@map("store")
 }
 
 model Product {
@@ -57,17 +32,7 @@ model Product {
   price       Int
   images      String[]
 
-  reviews    Review[]
-  orderItems OrderItem[]
-
-  store   Store?  @relation(fields: [storeId], references: [id])
-  storeId String? @map("store_id")
-
-  category   Category? @relation(fields: [categoryId], references: [id])
-  categoryId String?   @map("category_id")
-
-  color   Color?  @relation(fields: [colorId], references: [id])
-  colorId String? @map("color_id")
+  components ProductComponent[]
 
   user   User?   @relation(fields: [userId], references: [id])
   userId String? @map("user_id")
@@ -75,92 +40,34 @@ model Product {
   @@map("product")
 }
 
-model Category {
+model Component {
   id        String   @id @default(cuid())
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
 
-  title       String
-  description String
+  name        String
+  description String?
+  price       Int
 
-  products Product[]
+  products ProductComponent[]
 
-  store   Store?  @relation(fields: [storeId], references: [id])
-  storeId String? @map("store_id")
-
-  @@map("category")
+  @@map("component")
 }
 
-model Color {
+model ProductComponent {
   id        String   @id @default(cuid())
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
 
-  name  String
-  value String
+  product   Product @relation(fields: [productId], references: [id])
+  productId String  @map("product_id")
 
-  products Product[]
+  component   Component @relation(fields: [componentId], references: [id])
+  componentId String    @map("component_id")
 
-  store   Store?  @relation(fields: [storeId], references: [id])
-  storeId String? @map("store_id")
+  quantity Int @default(1)
 
-  @@map("color")
-}
-
-model Review {
-  id        String   @id @default(cuid())
-  createdAt DateTime @default(now()) @map("created_at")
-  updatedAt DateTime @updatedAt @map("updated_at")
-
-  text   String
-  rating Int
-
-  user   User?   @relation(fields: [userId], references: [id])
-  userId String? @map("user_id")
-
-  product   Product? @relation(fields: [productId], references: [id])
-  productId String?  @map("product_id")
-
-  store   Store?  @relation(fields: [storeId], references: [id])
-  storeId String? @map("store_id")
-
-  @@map("review")
-}
-
-model Order {
-  id        String   @id @default(cuid())
-  createdAt DateTime @default(now()) @map("created_at")
-  updatedAt DateTime @updatedAt @map("updated_at")
-
-  status EnumOrderStatus @default(PENDING)
-
-  items OrderItem[]
-  total Int
-
-  user   User?   @relation(fields: [userId], references: [id])
-  userId String? @map("user_id")
-
-  @@map("order")
-}
-
-model OrderItem {
-  id        String   @id @default(cuid())
-  createdAt DateTime @default(now()) @map("created_at")
-  updatedAt DateTime @updatedAt @map("updated_at")
-
-  quantity Int
-  price    Int
-
-  order   Order?  @relation(fields: [orderId], references: [id])
-  orderId String? @map("order_id")
-
-  product   Product? @relation(fields: [productId], references: [id])
-  productId String?  @map("product_id")
-
-  store   Store?  @relation(fields: [storeId], references: [id])
-  storeId String? @map("store_id")
-
-  @@map("order_item")
+  @@map("product_component")
 }
 
 enum EnumOrderStatus {

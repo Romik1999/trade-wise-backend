@@ -10,7 +10,9 @@ import {
 import { ComponentService } from './component.service';
 import { CreateComponentDto } from './dto/create-component.dto';
 import { UpdateComponentDto } from './dto/update-component.dto';
+import { Auth } from 'src/auth/decorators/auth.decorator';
 
+@Auth()
 @Controller('component')
 export class ComponentController {
   constructor(private readonly componentService: ComponentService) {}

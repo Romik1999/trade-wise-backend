@@ -11,6 +11,7 @@ async function bootstrap() {
     credentials: true,
     exposeHeaders: 'set-cookie',
   });
+  app.setGlobalPrefix('api');
 
   await app.listen(process.env.PORT ?? 5000);
 }

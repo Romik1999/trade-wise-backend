@@ -8,13 +8,26 @@ export class ProductService {
   constructor(private prisma: PrismaService) {}
 
   async create(createProductDto: CreateProductDto) {
+    const { components, ...productData } = createProductDto;
+
     return this.prisma.product.create({
-      data: createProductDto,
+      data: {
+        ...productData,
+        components: {
+          create: components?.map(({ id, quantity }) => ({
+            component: { connect: { id } },
+            quantity,
+          })),
+        },
+      },
+      include: { components: true },
     });
   }
 
   findAll() {
-    return this.prisma.product.findMany({});
+    return this.prisma.product.findMany({
+      include: { components: true },
+    });
   }
 
   async findOne(id: string) {
@@ -34,10 +47,20 @@ export class ProductService {
 
   async update(id: string, updateProductDto: UpdateProductDto) {
     await this.findOne(id);
+    const { components, ...productData } = updateProductDto;
 
     return this.prisma.product.update({
       where: { id },
-      data: updateProductDto,
+      data: {
+        ...productData,
+        components: {
+          create: components?.map(({ id, quantity }) => ({
+            component: { connect: { id } }, // Указываем ID компонента
+            quantity, // Передаем количество
+          })),
+        },
+      },
+      include: { components: true },
     });
   }
 

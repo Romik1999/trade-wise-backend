@@ -5,7 +5,19 @@ import {
   IsOptional,
   IsString,
   MaxLength,
+  ValidateNested,
 } from 'class-validator';
+import { Type } from 'class-transformer';
+
+class ProductComponentDto {
+  @IsString({ message: 'ID компонента должен быть строкой' })
+  @IsNotEmpty({ message: 'ID компонента не может быть пустым' })
+  id: string;
+
+  @IsNumber({}, { message: 'Количество должно быть числом' })
+  @IsNotEmpty({ message: 'Количество не может быть пустым' })
+  quantity: number;
+}
 
 export class CreateProductDto {
   @IsString({
@@ -32,4 +44,9 @@ export class CreateProductDto {
     message: 'Путь к картинке не может быть пустым',
   })
   images: string[];
+
+  @ValidateNested({ each: true })
+  @Type(() => ProductComponentDto)
+  @IsOptional()
+  components?: ProductComponentDto[];
 }

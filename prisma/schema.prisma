@@ -48,7 +48,7 @@ model Component {
   images       String[]
   seller_link  String? // ссылка на пролавца/маркетплейс ...
   remainder    Int? // остаток дома
-  unit_measure UnitMeasure // единицы измерения
+  unit_measure EnumUnitMeasure // единицы измерения
   length       Int?
   width        Int?
   height       Int?
@@ -81,7 +81,7 @@ enum EnumOrderStatus {
   PAYED
 }
 
-enum UnitMeasure {
+enum EnumUnitMeasure {
   PIECES
   PACKAGING
   GRAMS

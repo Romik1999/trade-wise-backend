@@ -1,6 +1,9 @@
 -- CreateEnum
 CREATE TYPE "EnumOrderStatus" AS ENUM ('PENDING', 'PAYED');
 
+-- CreateEnum
+CREATE TYPE "UnitMeasure" AS ENUM ('PIECES', 'PACKAGING', 'GRAMS', 'METERS');
+
 -- CreateTable
 CREATE TABLE "user" (
     "id" TEXT NOT NULL,
@@ -31,11 +34,19 @@ CREATE TABLE "product" (
 -- CreateTable
 CREATE TABLE "component" (
     "id" TEXT NOT NULL,
+    "title" TEXT NOT NULL,
+    "description" TEXT,
+    "price" INTEGER,
+    "images" TEXT[],
+    "seller_link" TEXT,
+    "remainder" INTEGER,
+    "unit_measure" "UnitMeasure" NOT NULL,
+    "length" INTEGER,
+    "width" INTEGER,
+    "height" INTEGER,
+    "diameter" INTEGER,
     "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updated_at" TIMESTAMP(3) NOT NULL,
-    "name" TEXT NOT NULL,
-    "description" TEXT,
-    "price" INTEGER NOT NULL,
 
     CONSTRAINT "component_pkey" PRIMARY KEY ("id")
 );

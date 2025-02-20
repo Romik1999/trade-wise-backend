@@ -41,15 +41,21 @@ model Product {
 }
 
 model Component {
-  id        String   @id @default(cuid())
-  createdAt DateTime @default(now()) @map("created_at")
-  updatedAt DateTime @updatedAt @map("updated_at")
-
-  name        String
-  description String?
-  price       Int
-
-  products ProductComponent[]
+  id           String             @id @default(cuid())
+  title        String
+  description  String?
+  price        Int? // цена закупки
+  images       String[]
+  seller_link  String? // ссылка на пролавца/маркетплейс ...
+  remainder    Int? // остаток дома
+  unit_measure UnitMeasure // единицы измерения
+  length       Int?
+  width        Int?
+  height       Int?
+  diameter     Int?
+  products     ProductComponent[]
+  createdAt    DateTime           @default(now()) @map("created_at")
+  updatedAt    DateTime           @updatedAt @map("updated_at")
 
   @@map("component")
 }
@@ -73,4 +79,11 @@ model ProductComponent {
 enum EnumOrderStatus {
   PENDING
   PAYED
+}
+
+enum UnitMeasure {
+  PIECES
+  PACKAGING
+  GRAMS
+  METERS
 }

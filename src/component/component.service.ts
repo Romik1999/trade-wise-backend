@@ -13,8 +13,50 @@ export class ComponentService {
     });
   }
 
-  findAll() {
-    return this.prisma.component.findMany();
+  findAll(
+    search?: string,
+    sort?: { field: string; order: 'asc' | 'desc' }[],
+    filters?: {
+      price?: { min?: number; max?: number };
+      createdAt?: { from?: Date; to?: Date };
+    },
+  ) {
+    return this.prisma.component.findMany({
+      orderBy: sort?.map(({ field, order }) => ({ [field]: order })) || {
+        createdAt: 'desc',
+      },
+      where: {
+        AND: [
+          search
+            ? {
+                OR: [
+                  { title: { contains: search, mode: 'insensitive' } },
+                  { description: { contains: search, mode: 'insensitive' } },
+                ],
+              }
+            : {},
+          filters?.price
+            ? {
+                price: {
+                  gte: filters.price.min,
+                  lte: filters.price.max,
+                },
+              }
+            : {},
+          filters?.createdAt
+            ? {
+                createdAt: {
+                  gte: filters.createdAt.from,
+                  lte: filters.createdAt.to,
+                },
+              }
+            : {},
+        ],
+      },
+      include: {
+        products: true,
+      },
+    });
   }
 
   async findOne(id: string) {

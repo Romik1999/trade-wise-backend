@@ -6,6 +6,7 @@ import {
   Param,
   Patch,
   Post,
+  Query,
 } from '@nestjs/common';
 import { ComponentService } from './component.service';
 import { CreateComponentDto } from './dto/create-component.dto';
@@ -23,8 +24,8 @@ export class ComponentController {
   }
 
   @Get()
-  findAll() {
-    return this.componentService.findAll();
+  findAll(@Query('search') search?: string) {
+    return this.componentService.findAll(search);
   }
 
   @Get(':id')

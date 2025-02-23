@@ -1,4 +1,5 @@
 import { IsEmail, IsOptional, IsString, MinLength } from 'class-validator';
+import { ApiProperty } from '@nestjs/swagger';
 
 export class AuthDto {
   @IsOptional()
@@ -9,6 +10,10 @@ export class AuthDto {
     message: 'Почта обязательна',
   })
   @IsEmail()
+  @ApiProperty({
+    example: 'user@example.com',
+    description: 'Email пользователя',
+  })
   email: string;
 
   @MinLength(6, {
@@ -17,5 +22,6 @@ export class AuthDto {
   @IsString({
     message: 'Пароль обязателен',
   })
+  @ApiProperty({ example: '123456', description: 'Пароль пользователя' })
   password: string;
 }

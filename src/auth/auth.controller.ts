@@ -12,6 +12,7 @@ import {
 import { AuthService } from './auth.service';
 import { AuthDto } from './dto/auth.dto';
 import { Request, Response } from 'express';
+import { ApiOperation, ApiResponse } from '@nestjs/swagger';
 
 @Controller('auth')
 export class AuthController {
@@ -20,6 +21,13 @@ export class AuthController {
   @UsePipes(new ValidationPipe())
   @HttpCode(200)
   @Post('login')
+  @ApiOperation({ summary: 'Вход в систему' }) // Краткое описание
+  @ApiResponse({
+    status: 200,
+    description: 'Успешный вход',
+    type: AuthDto,
+  })
+  @ApiResponse({ status: 401, description: 'Ошибка авторизации' })
   async login(@Body() dto: AuthDto, @Res({ passthrough: true }) res: Response) {
     const { refreshToken, ...response } = await this.authService.login(dto);
 

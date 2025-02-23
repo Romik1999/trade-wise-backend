@@ -20,7 +20,12 @@ export class ComponentService {
       price?: { min?: number; max?: number };
       createdAt?: { from?: Date; to?: Date };
     },
+    page: number = 1,
+    pageSize: number = 10,
   ) {
+    const skip = (page - 1) * pageSize;
+    const take = pageSize;
+
     return this.prisma.component.findMany({
       orderBy: sort?.map(({ field, order }) => ({ [field]: order })) || {
         createdAt: 'desc',
@@ -56,6 +61,8 @@ export class ComponentService {
       include: {
         products: true,
       },
+      skip,
+      take,
     });
   }
 

@@ -12,6 +12,8 @@ import { ComponentService } from './component.service';
 import { CreateComponentDto } from './dto/create-component.dto';
 import { UpdateComponentDto } from './dto/update-component.dto';
 import { Auth } from 'src/auth/decorators/auth.decorator';
+import { FindProductsDto } from './dto/get-component.dto';
+import { ApiOperation, ApiResponse } from '@nestjs/swagger';
 
 @Auth()
 @Controller('component')
@@ -24,8 +26,23 @@ export class ComponentController {
   }
 
   @Get()
-  findAll(@Query('search') search?: string) {
-    return this.componentService.findAll(search);
+  @ApiOperation({
+    summary:
+      'Получить список продуктов с фильтрацией, сортировкой и пагинацией',
+  })
+  @ApiResponse({
+    status: 200,
+    description: 'Успешный ответ',
+    type: [FindProductsDto],
+  })
+  findAll(@Query() query: FindProductsDto) {
+    return this.componentService.findAll(
+      query.search,
+      query.sort,
+      { price: query.price, createdAt: query.createdAt },
+      query.page,
+      query.pageSize,
+    );
   }
 
   @Get(':id')

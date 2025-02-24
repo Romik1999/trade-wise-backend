@@ -49,8 +49,8 @@ export class ComponentService {
           createdAt
             ? {
                 createdAt: {
-                  gt: '2024-01-01',
-                  lt: '2024-01-01',
+                  gte: createdAt.from,
+                  lte: createdAt.to,
                 },
               }
             : {},

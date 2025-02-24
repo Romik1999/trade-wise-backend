@@ -44,11 +44,19 @@ export class ComponentController {
           }
         : undefined;
 
+    const createdAt =
+      query['createdAt[from]'] && query['createdAt[to]']
+        ? {
+            from: query['createdAt[from]'] as Date,
+            to: query['createdAt[to]'] as Date,
+          }
+        : undefined;
+
     return this.componentService.findAll(
       query.search,
       query.sort,
       price,
-      query.createdAt,
+      createdAt,
       query.page,
       query.pageSize,
     );

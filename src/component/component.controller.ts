@@ -36,10 +36,19 @@ export class ComponentController {
     type: [FindProductsDto],
   })
   findAll(@Query() query: FindProductsDto) {
+    const price =
+      query['price[min]'] && query['price[max]']
+        ? {
+            min: Number(query['price[min]']),
+            max: Number(query['price[max]']),
+          }
+        : undefined;
+
     return this.componentService.findAll(
       query.search,
       query.sort,
-      { price: query.price, createdAt: query.createdAt },
+      price,
+      query.createdAt,
       query.page,
       query.pageSize,
     );

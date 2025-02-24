@@ -16,10 +16,8 @@ export class ComponentService {
   findAll(
     search?: string,
     sort?: { field: string; order: 'asc' | 'desc' }[],
-    filters?: {
-      price?: { min?: number; max?: number };
-      createdAt?: { from?: Date; to?: Date };
-    },
+    price?: { min?: number; max?: number },
+    createdAt?: { from?: Date; to?: Date },
     page: number = 1,
     pageSize: number = 10,
   ) {
@@ -40,19 +38,19 @@ export class ComponentService {
                 ],
               }
             : {},
-          filters?.price
+          price
             ? {
                 price: {
-                  gte: filters.price.min,
-                  lte: filters.price.max,
+                  gt: price.min,
+                  lt: price.max,
                 },
               }
             : {},
-          filters?.createdAt
+          createdAt
             ? {
                 createdAt: {
-                  gte: filters.createdAt.from,
-                  lte: filters.createdAt.to,
+                  gt: '2024-01-01',
+                  lt: '2024-01-01',
                 },
               }
             : {},

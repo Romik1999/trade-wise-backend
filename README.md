@@ -30,6 +30,19 @@
 
 ```bash
 $ yarn install
+# Развертывание БД
+$ docker compose -f docker-compose.postgres.yml up -d
+# генерация призмы
+$ yarn prisma generate
+# применение миграций
+$ yarn prisma migrate deploy
+# выполнение сидера
+$ yarn prisma db seed
+# или
+$ yarn run prisma:seed
+
+#На выходе получаем вот такого юзера:
+admin@example.com / 123456
 ```
 
 ## Compile and run the project

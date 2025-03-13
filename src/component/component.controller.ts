@@ -52,9 +52,16 @@ export class ComponentController {
           }
         : undefined;
 
+    const sortBy =
+      query?.sort &&
+      query.sort?.map((item) => {
+        const [key, value] = item.split(':');
+        return { [key]: value };
+      });
+
     return this.componentService.findAll(
       query.search,
-      query.sort,
+      sortBy,
       price,
       createdAt,
       query.page,

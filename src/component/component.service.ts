@@ -15,7 +15,7 @@ export class ComponentService {
 
   findAll(
     search?: string,
-    sort?: { field: string; order: 'asc' | 'desc' }[],
+    sortBy?: { [key: string]: string }[],
     price?: { min?: number; max?: number },
     createdAt?: { from?: Date; to?: Date },
     page: number = 1,
@@ -25,9 +25,7 @@ export class ComponentService {
     const take = pageSize;
 
     return this.prisma.component.findMany({
-      orderBy: sort?.map(({ field, order }) => ({ [field]: order })) || {
-        createdAt: 'desc',
-      },
+      orderBy: sortBy,
       where: {
         AND: [
           search

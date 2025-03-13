@@ -33,7 +33,7 @@ export class FindProductsDto {
   search?: string;
 
   @ApiPropertyOptional({ type: [SortDto], description: 'Сортировка' })
-  sort?: SortDto[];
+  sort?: string[];
 
   @ApiPropertyOptional({ type: PriceFilterDto, description: 'Фильтр по цене' })
   price?: PriceFilterDto;

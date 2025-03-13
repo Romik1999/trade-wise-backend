@@ -1,16 +1,4 @@
-import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
-
-class SortDto {
-  @ApiProperty({ example: 'price', description: 'Поле для сортировки' })
-  field: string;
-
-  @ApiProperty({
-    example: 'desc',
-    enum: ['asc', 'desc'],
-    description: 'Порядок сортировки',
-  })
-  order: 'asc' | 'desc';
-}
+import { ApiPropertyOptional } from '@nestjs/swagger';
 
 class PriceFilterDto {
   @ApiPropertyOptional({ example: 100, description: 'Минимальная цена' })
@@ -32,7 +20,6 @@ export class FindProductsDto {
   @ApiPropertyOptional({ example: 'example', description: 'Поисковый запрос' })
   search?: string;
 
-  @ApiPropertyOptional({ type: [SortDto], description: 'Сортировка' })
   sort?: string[];
 
   @ApiPropertyOptional({ type: PriceFilterDto, description: 'Фильтр по цене' })

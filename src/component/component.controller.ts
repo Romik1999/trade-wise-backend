@@ -15,6 +15,15 @@ import { Auth } from 'src/auth/decorators/auth.decorator';
 import { FindProductsDto } from './dto/get-component.dto';
 import { ApiOperation, ApiResponse } from '@nestjs/swagger';
 
+const checkSort = (sort: FindProductsDto) => {
+  return Object.entries(sort)
+    .filter(([key]) => key.startsWith('sort['))
+    .map(([key, value]) => {
+      const sortKey = key.slice(5, -1);
+      return { [sortKey]: value };
+    });
+};
+
 @Auth()
 @Controller('component')
 export class ComponentController {
@@ -52,12 +61,7 @@ export class ComponentController {
           }
         : undefined;
 
-    const sortBy =
-      query?.sort &&
-      query.sort?.map((item) => {
-        const [key, value] = item.split(':');
-        return { [key]: value };
-      });
+    const sortBy = checkSort(query);
 
     return this.componentService.findAll(
       query.search,

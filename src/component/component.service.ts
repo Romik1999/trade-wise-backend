@@ -13,7 +13,7 @@ export class ComponentService {
     });
   }
 
-  findAll(
+  async findAll(
     search?: string,
     sortBy?: { [key: string]: string }[],
     price?: { min?: number; max?: number },
@@ -24,42 +24,52 @@ export class ComponentService {
     const skip = (page - 1) * pageSize;
     const take = pageSize;
 
-    return this.prisma.component.findMany({
-      orderBy: sortBy,
-      where: {
-        AND: [
-          search
-            ? {
-                OR: [
-                  { title: { contains: search, mode: 'insensitive' } },
-                  { description: { contains: search, mode: 'insensitive' } },
-                ],
-              }
-            : {},
-          price
-            ? {
-                price: {
-                  gt: price.min,
-                  lt: price.max,
-                },
-              }
-            : {},
-          createdAt
-            ? {
-                createdAt: {
-                  gte: createdAt.from,
-                  lte: createdAt.to,
-                },
-              }
-            : {},
-        ],
-      },
-      include: {
-        products: true,
-      },
-      skip,
-      take,
-    });
+    const where = {
+      AND: [
+        search
+          ? {
+              OR: [
+                { title: { contains: search, mode: 'insensitive' } },
+                { description: { contains: search, mode: 'insensitive' } },
+              ],
+            }
+          : {},
+        price
+          ? {
+              price: {
+                gte: price.min,
+                lte: price.max,
+              },
+            }
+          : {},
+        createdAt
+          ? {
+              createdAt: {
+                gte: createdAt.from,
+                lte: createdAt.to,
+              },
+            }
+          : {},
+      ],
+    };
+
+    const [items, total] = await Promise.all([
+      this.prisma.component.findMany({
+        orderBy: sortBy,
+        where,
+        include: {
+          products: true,
+        },
+        skip,
+        take,
+      }),
+      this.prisma.component.count({ where }),
+    ]);
+
+    return {
+      items,
+      total,
+    };
   }
 
   async findOne(id: string) {

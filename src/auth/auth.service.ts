@@ -13,7 +13,7 @@ import { Response } from 'express';
 
 @Injectable()
 export class AuthService {
-  EXPIRE_DAY_REFRESH_TOKEN = 1;
+  EXPIRE_DAY_REFRESH_TOKEN = 999;
   REFRESH_TOKEN_NAME = 'refreshToken';
 
   constructor(

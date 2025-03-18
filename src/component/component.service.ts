@@ -96,8 +96,15 @@ export class ComponentService {
   async remove(id: string) {
     await this.findOne(id);
 
-    return this.prisma.component.delete({
+    await this.prisma.component.delete({
       where: { id },
     });
+
+    return {
+      statusCode: 200,
+      data: {
+        message: 'Компонент удален успешно',
+      },
+    };
   }
 }

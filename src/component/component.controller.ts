@@ -13,8 +13,8 @@ import { ComponentService } from './component.service';
 import { CreateComponentDto } from './dto/create-component.dto';
 import { UpdateComponentDto } from './dto/update-component.dto';
 import { Auth } from 'src/auth/decorators/auth.decorator';
-import { FindProductsDto } from './dto/get-component.dto';
-import { ApiOperation, ApiResponse } from '@nestjs/swagger';
+import { FindProductsDto, GetComponentDto } from './dto/get-component.dto';
+import { ApiBody, ApiOperation, ApiResponse } from '@nestjs/swagger';
 
 const checkSort = (sort: FindProductsDto) => {
   return Object.entries(sort)
@@ -33,10 +33,13 @@ export class ComponentController {
   @Post()
   @HttpCode(200)
   @ApiOperation({ summary: 'Метод Создания компонента' })
+  @ApiBody({
+    type: CreateComponentDto,
+  })
   @ApiResponse({
     status: 200,
     description: 'Успешное создание продукта',
-    type: CreateComponentDto,
+    type: GetComponentDto,
   })
   create(@Body() createComponentDto: CreateComponentDto) {
     return this.componentService.create(createComponentDto);
@@ -47,10 +50,13 @@ export class ComponentController {
     summary:
       'Получить список продуктов с фильтрацией, сортировкой и пагинацией',
   })
+  @ApiBody({
+    type: FindProductsDto,
+  })
   @ApiResponse({
     status: 200,
     description: 'Успешный ответ',
-    type: [FindProductsDto],
+    type: [GetComponentDto],
   })
   findAll(@Query() query: FindProductsDto) {
     const price =
@@ -88,7 +94,7 @@ export class ComponentController {
   @ApiResponse({
     status: 200,
     description: 'Успешный ответ',
-    type: CreateComponentDto,
+    type: GetComponentDto,
   })
   findOne(@Param('id') id: string) {
     return this.componentService.findOne(id);
@@ -98,10 +104,13 @@ export class ComponentController {
   @ApiOperation({
     summary: 'Обновить данные продукта по его id',
   })
+  @ApiBody({
+    type: CreateComponentDto,
+  })
   @ApiResponse({
     status: 200,
     description: 'Успешный ответ',
-    type: CreateComponentDto,
+    type: GetComponentDto,
   })
   update(
     @Param('id') id: string,

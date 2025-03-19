@@ -3,6 +3,7 @@ import {
   Controller,
   Delete,
   Get,
+  HttpCode,
   Param,
   Patch,
   Post,
@@ -30,6 +31,13 @@ export class ComponentController {
   constructor(private readonly componentService: ComponentService) {}
 
   @Post()
+  @HttpCode(200)
+  @ApiOperation({ summary: 'Метод Создания компонента' })
+  @ApiResponse({
+    status: 200,
+    description: 'Успешное создание продукта',
+    type: CreateComponentDto,
+  })
   create(@Body() createComponentDto: CreateComponentDto) {
     return this.componentService.create(createComponentDto);
   }
@@ -74,11 +82,27 @@ export class ComponentController {
   }
 
   @Get(':id')
+  @ApiOperation({
+    summary: 'Получить продукт по его id',
+  })
+  @ApiResponse({
+    status: 200,
+    description: 'Успешный ответ',
+    type: CreateComponentDto,
+  })
   findOne(@Param('id') id: string) {
     return this.componentService.findOne(id);
   }
 
   @Patch(':id')
+  @ApiOperation({
+    summary: 'Обновить данные продукта по его id',
+  })
+  @ApiResponse({
+    status: 200,
+    description: 'Успешный ответ',
+    type: CreateComponentDto,
+  })
   update(
     @Param('id') id: string,
     @Body() updateComponentDto: UpdateComponentDto,
@@ -87,6 +111,13 @@ export class ComponentController {
   }
 
   @Delete(':id')
+  @ApiOperation({
+    summary: 'Удалить продукт по его id',
+  })
+  @ApiResponse({
+    status: 200,
+    description: 'Успешный ответ',
+  })
   remove(@Param('id') id: string) {
     return this.componentService.remove(id);
   }

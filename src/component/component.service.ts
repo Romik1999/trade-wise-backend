@@ -69,6 +69,8 @@ export class ComponentService {
     return {
       items,
       total,
+      statusCode: 200,
+      message: 'Items retrieved successfully',
     };
   }
 
@@ -81,7 +83,11 @@ export class ComponentService {
 
     if (!component) throw new NotFoundException('Компонент не найден');
 
-    return component;
+    return {
+      statusCode: 200,
+      message: 'Item retrieved successfully',
+      data: component,
+    };
   }
 
   async update(id: string, updateComponentDto: UpdateComponentDto) {
@@ -102,9 +108,7 @@ export class ComponentService {
 
     return {
       statusCode: 200,
-      data: {
-        message: 'Компонент удален успешно',
-      },
+      message: 'Компонент удален успешно',
     };
   }
 }
